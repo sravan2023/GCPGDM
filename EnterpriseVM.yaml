@@ -1,0 +1,38 @@
+resources:
+- name: dm-vm-01-a
+  properties:
+    disks:
+    - autoDelete: true
+      boot: true
+      deviceName: boot-a
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/family/debian-9
+      type: PERSISTENT
+    machineType: https://www.googleapis.com/compute/v1/projects/itomcmp/zones/us-west1-a/machineTypes/n1-standard-1
+    networkInterfaces:
+    - accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+      network: $(ref.dm-network-a.selfLink)
+    zone: us-west1-a
+  type: compute.v1.instance
+  metadata:
+    dependsOn:
+    - dm-network-a
+- name: dm-network-a
+  properties:
+    IPv4Range: 10.0.0.0/8
+  type: compute.v1.network
+- name: dm-firewall-a
+  properties:
+    allowed:
+    - IPProtocol: TCP
+      ports:
+      - 80
+    network: $(ref.dm-network-a.selfLink)
+    sourceRanges:
+    - 0.0.0.0/0
+  type: compute.v1.firewall
+  metadata:
+    dependsOn:
+    - dm-network-a
