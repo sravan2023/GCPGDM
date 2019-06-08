@@ -1,5 +1,5 @@
 resources:
-- name: dm-vm-01-a
+- name: dm-vm-2023
   properties:
     disks:
     - autoDelete: true
@@ -13,26 +13,26 @@ resources:
     - accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT
-      network: $(ref.dm-network-a.selfLink)
+      network: $(ref.dm-network-2023.selfLink)
     zone: us-west1-a
   type: compute.v1.instance
   metadata:
     dependsOn:
-    - dm-network-a
-- name: dm-network-a
+    - dm-network-2023
+- name: dm-network-2023
   properties:
     IPv4Range: 10.0.0.0/8
   type: compute.v1.network
-- name: dm-firewall-a
+- name: dm-firewall-2023
   properties:
     allowed:
     - IPProtocol: TCP
       ports:
       - 80
-    network: $(ref.dm-network-a.selfLink)
+    network: $(ref.dm-network-2023.selfLink)
     sourceRanges:
     - 0.0.0.0/0
   type: compute.v1.firewall
   metadata:
     dependsOn:
-    - dm-network-a
+    - dm-network-2023
